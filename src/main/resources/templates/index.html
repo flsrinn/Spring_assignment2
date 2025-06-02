@@ -8,6 +8,11 @@
 
 <body>
 <div class="container">
+  <a class="btn btn-warning mt-4 mb-3" th:href="@{/admin/users}" sec:authorize="hasRole('ADMIN')">Admin Page</a>
+  <form th:action="@{/logout}" method="post" sec:authorize="isAuthenticated()" style="display:inline;">
+    <button type="submit" class="btn btn-outline-danger mt-4 mb-3">Log Out</button>
+  </form>
+
   <h1 class="mt-5">Product List</h1>
   <a class="btn btn-primary mb-3" th:href="@{/products/new}" sec:authorize="hasRole('ADMIN')">Create New Product</a>
 

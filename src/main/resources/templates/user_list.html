@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+<head th:insert="~{common :: commonHead}">
+  <title>User List</title>
+</head>
+<body>
+<div class="container">
+  <!-- 메인 페이지 버튼, 관리자만 보이게 -->
+  <a class="btn btn-secondary mt-4 mb-3" th:href="@{/}" sec:authorize="isAuthenticated()">메인으로</a>
+
+  <h1 class="mt-5 mb-4">User List <small class="text-muted">(Admin only)</small></h1>
+
+  <table class="table table-bordered table-hover align-middle shadow-sm">
+    <thead class="table-dark">
+    <tr>
+      <th>ID</th>
+      <th>Email</th>
+      <th>Roles</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users}">
+      <td th:text="${user.id}">1</td>
+      <td th:text="${user.email}">email@example.com</td>
+      <td>
+          <span class="badge bg-primary me-1"
+                th:each="role : ${user.roles}"
+                th:text="${role.rolename}">ROLE_USER</span>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Bootstrap JS fragment 삽입 -->
+<div th:insert="~{common :: commonScript}"></div>
+</body>
+</html>
