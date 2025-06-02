@@ -27,16 +27,24 @@ public class AuthController {
 
     @PostMapping("/signup")
     public String signup(@ModelAttribute MyUser user, Model model) {
-        // 이메일 중복 체크 (선택)
+
+        // 1) 이메일 중복 체크
         if (registrationService.checkEmailExists(user.getEmail())) {
             model.addAttribute("emailExists", true);
             return "signup";
         }
 
-        // 기본 권한 리스트 생성
+        // 2) 권한 결정
         List<MyRole> userRoles = new ArrayList<>();
-        userRoles.add(registrationService.findByRolename("ROLE_USER"));
 
+        // admin@ 로 시작하면 관리자, 그 외는 일반 사용자
+        if (user.getEmail() != null && user.getEmail().toLowerCase().startsWith("admin@")) {
+            userRoles.add(registrationService.findByRolename("ROLE_ADMIN"));
+        } else {
+            userRoles.add(registrationService.findByRolename("ROLE_USER"));
+        }
+
+        // 3) 회원 생성
         registrationService.createUser(user, userRoles);
 
         return "redirect:/login";
